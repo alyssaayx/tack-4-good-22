@@ -4,11 +4,13 @@ input.onButtonPressed(Button.A, function () {
 input.onButtonPressed(Button.B, function () {
     pins.servoWritePin(AnalogPin.P1, 50)
 })
-let angle = 0
 let millig = 0
-basic.pause(500)
-pins.servoWritePin(AnalogPin.P1, 90)
+let direction = 1
+let angle = 0
+pins.servoWritePin(AnalogPin.P1, angle)
 basic.forever(function () {
+    angle += direction
+    pins.servoWritePin(AnalogPin.P1, angle)
     millig = input.acceleration(Dimension.X)
     angle = pins.map(
     millig,
@@ -17,5 +19,7 @@ basic.forever(function () {
     0,
     180
     )
-    pins.servoWritePin(AnalogPin.P0, angle)
+    if (angle >= 180 || angle <= 0) {
+        direction = direction * -1
+    }
 })
